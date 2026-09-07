@@ -1,5 +1,8 @@
 package main
 
 func main() {
-	startRepl()
+	conf := &config{
+		commands: getCmd(),
+	}
+	startRepl(conf)
 }
