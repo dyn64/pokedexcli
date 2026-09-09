@@ -7,16 +7,6 @@ import (
 	"net/http"
 )
 
-type pokeMap struct {
-	Count    int     `json:"count"`
-	Next     string  `json:"next"`
-	Previous *string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
-}
-
 func commandMap(conf *config) error {
 	res, err := http.Get(conf.mapNext)
 	if err != nil {
@@ -31,7 +21,7 @@ func commandMap(conf *config) error {
 	if err != nil {
 		return fmt.Errorf("io.readall error: %v", err)
 	}
-	pokMap := pokeMap{}
+	pokMap := pokeapi.pokeMap{}
 	err = json.Unmarshal(body, &pokMap)
 	if err != nil {
 		return fmt.Errorf("Unmarshal failed with error: %v", err)
