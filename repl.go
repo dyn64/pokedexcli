@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/dyn64/pokedexcli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -14,10 +16,10 @@ type cliCommand struct {
 }
 
 type config struct {
-	commands map[string]cliCommand
-	mapNext  string
-	mapBack  string
-	mapBase  string
+	commands      map[string]cliCommand
+	pokeapiClient pokeapi.Client
+	nextLocation  *string
+	prevLocation  *string
 }
 
 func getCmd() map[string]cliCommand {
@@ -36,12 +38,12 @@ func getCmd() map[string]cliCommand {
 		"map": {
 			name:        "map",
 			description: "Lists map locations",
-			callback:    commandMap,
+			callback:    commandMapNext,
 		},
 		"mapb": {
 			name:        "mapb",
 			description: "Lists the previous 20 map locations",
-			callback:    commandMapBack,
+			callback:    commandMapPrev,
 		},
 	}
 }

@@ -1,76 +1,38 @@
 package main
 
-import (
-	"encoding/json"
-	"fmt"
-	"io"
-	"net/http"
-)
+import "fmt"
 
-func commandMap(conf *config) error {
-	res, err := http.Get(conf.mapNext)
+func commandMapNext(conf *config) error {
+	locations, err := conf.pokeapiClient.ListLocations(conf.nextLocation)
 	if err != nil {
-		return fmt.Errorf("http GET error from url: %s \nError: %v", conf.mapNext, err)
+		return err
 	}
 
-	body, err := io.ReadAll(res.Body)
-	defer res.Body.Close()
-	if res.StatusCode > 299 {
-		return fmt.Errorf("Response failed. Status code: %d\nBody: %s", res.StatusCode, body)
+	conf.nextLocation = locations.Next
+	conf.prevLocation = locations.Previous
+
+	for _, location := range locations.Results {
+		fmt.Println(location.Name)
 	}
-	if err != nil {
-		return fmt.Errorf("io.readall error: %v", err)
-	}
-	pokMap := pokeapi.pokeMap{}
-	err = json.Unmarshal(body, &pokMap)
-	if err != nil {
-		return fmt.Errorf("Unmarshal failed with error: %v", err)
-	}
-	for loc := range pokMap.Results {
-		fmt.Println(pokMap.Results[loc].Name)
-	}
-	if pokMap.Previous == nil {
-		conf.mapBack = conf.mapBase
-	} else {
-		conf.mapBack = *pokMap.Previous
-	}
-	conf.mapNext = pokMap.Next
 	return nil
 }
 
-func commandMapBack(conf *config) error {
-	if conf.mapBack == conf.mapBase {
-		fmt.Println("you're on the first page")
-		return nil
-	}
-	url := conf.mapBack
-	res, err := http.Get(url)
-	if err != nil {
-		return fmt.Errorf("http GET error from url: %s \nError: %v", url, err)
+func commandMapPrev(conf *config) error {
+	if conf.prevLocation == nil {
+		return fmt.Errorf("your're on the first page")
 	}
 
-	body, err := io.ReadAll(res.Body)
-	defer res.Body.Close()
-	if res.StatusCode > 299 {
-		return fmt.Errorf("Response failed. Status code: %d\nBody: %s", res.StatusCode, body)
-	}
+	locations, err := conf.pokeapiClient.ListLocations(conf.prevLocation)
 	if err != nil {
-		return fmt.Errorf("io.readall error: %v", err)
+		return err
 	}
-	pokMap := pokeMap{}
-	err = json.Unmarshal(body, &pokMap)
-	if err != nil {
-		return fmt.Errorf("Unmarshal failed with error: %v", err)
+
+	conf.nextLocation = locations.Next
+	conf.prevLocation = locations.Previous
+
+	for _, location := range locations.Results {
+		fmt.Println(location.Name)
 	}
-	for loc := range pokMap.Results {
-		fmt.Println(pokMap.Results[loc].Name)
-	}
-	if pokMap.Previous == nil {
-		conf.mapBack = conf.mapBase
-	} else {
-		conf.mapBack = *pokMap.Previous
-	}
-	conf.mapNext = pokMap.Next
+
 	return nil
-
 }
