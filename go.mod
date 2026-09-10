@@ -2,4 +2,4 @@ module github.com/dyn64/pokedexcli
 
 go 1.25.1
 
-require github.com/google/go-cmp v0.7.0 // indirect
+require github.com/google/go-cmp v0.7.0
