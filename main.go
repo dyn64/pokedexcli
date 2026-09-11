@@ -11,6 +11,7 @@ func main() {
 	conf := &config{
 		commands:      getCmd(),
 		pokeapiClient: pokeClient,
+		pokeDex:       pokeapi.NewPokedex(),
 	}
 	startRepl(conf)
 }

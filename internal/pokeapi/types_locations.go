@@ -11,7 +11,8 @@ type pokeMap struct {
 	} `json:"results"`
 }
 
-type LocationInfo struct {
+// locationInfo
+type locationInfo struct {
 	ID                   int    `json:"id"`
 	Name                 string `json:"name"`
 	GameIndex            int    `json:"game_index"`
