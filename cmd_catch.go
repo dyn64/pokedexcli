@@ -7,8 +7,7 @@ import (
 
 func commandCatchPokemon(conf *config, args ...string) error {
 	if len(args) != 1 {
-		fmt.Println("Missing pokemon")
-		return nil
+		return fmt.Errorf("Missing pokemon")
 	}
 	pokemon := args[0]
 
@@ -26,7 +25,7 @@ func commandCatchPokemon(conf *config, args ...string) error {
 		fmt.Printf("Caught %v!\n", pokemonInfo.Name)
 		conf.pokeDex.Add(pokemonInfo)
 	} else {
-		fmt.Println("Failed!")
+		fmt.Printf("%v escaped!\n", pokemonInfo.Name)
 	}
 
 	return nil
