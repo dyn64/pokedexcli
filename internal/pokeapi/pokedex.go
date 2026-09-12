@@ -2,10 +2,6 @@ package pokeapi
 
 import "fmt"
 
-// type PokeDex struct {
-// 	dex map[string]Pokemon
-// }
-
 func NewPokedex() PokeDex {
 	return PokeDex{
 		dex: make(map[string]pokemonInfo),
@@ -15,13 +11,6 @@ func NewPokedex() PokeDex {
 type PokeDex struct {
 	dex map[string]pokemonInfo
 }
-
-// func NewPokedex() PokeDex {
-// 	dex := make(map[string]Pokemon)
-// 	return PokeDex{
-// 		dex: dex,
-// 	}
-// }
 
 func (d *PokeDex) Add(pokemon pokemonInfo) error {
 	_, ok := d.dex[pokemon.Name]
@@ -55,5 +44,16 @@ func (d *PokeDex) Get(pokemon string) error {
 		fmt.Printf("\t- %v\n", Type.Type.Name)
 	}
 	fmt.Println()
+	return nil
+}
+
+func (d *PokeDex) List() error {
+	if len(d.dex) == 0 {
+		return fmt.Errorf("You have not caught any pokemon!")
+	}
+	fmt.Println("Your Pokedex:")
+	for _, poke := range d.dex {
+		fmt.Printf("\t- %v\n", poke.Name)
+	}
 	return nil
 }
