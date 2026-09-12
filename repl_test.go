@@ -1,5 +1,7 @@
 package main
 
+// small unit test for the repl (input-loop)
+
 import (
 	"testing"
 

@@ -1,11 +1,14 @@
 package pokecache
 
+// a small unit test for the cache package
+
 import (
 	"fmt"
 	"testing"
 	"time"
 )
 
+// tests the add/get functions
 func TestAddGet(t *testing.T) {
 	const interval = 5 * time.Second
 	cases := []struct {
@@ -39,6 +42,7 @@ func TestAddGet(t *testing.T) {
 	}
 }
 
+// tests the reaploop
 func TestReapLoop(t *testing.T) {
 	const baseTime = 5 * time.Millisecond
 	const waitTime = baseTime + 5*time.Millisecond

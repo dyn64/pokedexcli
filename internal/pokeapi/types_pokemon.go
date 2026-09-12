@@ -1,11 +1,6 @@
 package pokeapi
 
-type Pokemon struct {
-	Name     string
-	Level    int
-	pokeInfo pokemonInfo
-}
-
+// pokemonInfo JSON struct
 type pokemonInfo struct {
 	ID             int    `json:"id"`
 	Name           string `json:"name"`

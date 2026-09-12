@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// Explores a location and lists which the pokemon found there
 func commandExplore(conf *config, args ...string) error {
 	if len(args) != 1 {
 		fmt.Printf("Missing location\n")

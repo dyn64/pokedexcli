@@ -5,11 +5,13 @@ import (
 	"time"
 )
 
+// cacheEntry just contains the time of creatoin and data as []byte
 type cacheEntry struct {
 	createdAt time.Time
 	val       []byte
 }
 
+// the Cache struct is just a map of entries and a mutex to be able to lock/unlock the cache
 type Cache struct {
 	cache map[string]cacheEntry
 	mut   *sync.Mutex
@@ -21,6 +23,7 @@ func NewCache(interval time.Duration) Cache {
 		cache: make(map[string]cacheEntry),
 		mut:   &sync.Mutex{},
 	}
+	// starts the reaploop with the set interval as a (go) subroutine
 	go c.reapLoop(interval)
 	return c
 }
@@ -49,8 +52,8 @@ func (c *Cache) reapLoop(interval time.Duration) {
 	}
 }
 
+// does the actual reaping
 func (c *Cache) reap(now time.Time, last time.Duration) {
-
 	c.mut.Lock()
 	defer c.mut.Unlock()
 	for key, value := range c.cache {

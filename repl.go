@@ -9,12 +9,14 @@ import (
 	"github.com/dyn64/pokedexcli/internal/pokeapi"
 )
 
+// defines a command with name,desc and which function to call
 type cliCommand struct {
 	name        string
 	description string
 	callback    func(*config, ...string) error
 }
 
+// defines the shared config with a client, next/prev location and a pokedex
 type config struct {
 	pokeapiClient pokeapi.Client
 	nextLocation  *string
@@ -22,6 +24,7 @@ type config struct {
 	pokeDex       pokeapi.PokeDex
 }
 
+// returns a map of all the available commands
 func getCmd() map[string]cliCommand {
 
 	return map[string]cliCommand{
@@ -68,10 +71,14 @@ func getCmd() map[string]cliCommand {
 	}
 }
 
+// main loop
 func startRepl(conf *config) {
 
+	// creates the scanner from stdin
 	scanner := bufio.NewScanner(os.Stdin)
 
+	// starts the loop:
+	// get input -> cleans it up -> checks for a command -> run it or display error
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
@@ -101,6 +108,7 @@ func startRepl(conf *config) {
 	}
 }
 
+// Cleans up the input string by making it all lowercase and removing extra spaces
 func cleanInput(text string) []string {
 	text = strings.ToLower(text)
 	result := strings.Fields(text)
